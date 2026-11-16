@@ -416,8 +416,8 @@ h2 { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: c
       <form class="form" id="form" autocomplete="on" novalidate>
         <div class="field"><label for="f-name">Your name</label><input id="f-name" name="name" type="text" autocomplete="name" autocapitalize="words" enterkeyhint="next" placeholder="e.g. Rina"></div>
         <div class="field"><label for="f-phone">WhatsApp number</label><input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" enterkeyhint="next" placeholder="e.g. 0812 3456 7890"></div>
-        <div class="field"><label for="f-addr">Delivery address (optional)</label><textarea id="f-addr" name="address" rows="3" autocomplete="street-address" placeholder="Street, building, room, landmark. Leave empty if you pick up."></textarea></div>
-        <div class="field"><label for="f-note">Notes (optional)</label><textarea id="f-note" name="note" rows="2" placeholder="e.g. less ice, pick up time"></textarea></div>
+        <div class="field"><label for="f-addr">Delivery address (required)</label><textarea id="f-addr" name="address" rows="3" autocomplete="street-address" required aria-required="true" placeholder="Street, building, room, landmark"></textarea></div>
+        <div class="field"><label for="f-note">Notes (optional)</label><textarea id="f-note" name="note" rows="2" placeholder="e.g. less ice, preferred delivery time"></textarea></div>
       <div class="hp" aria-hidden="true"><label>Leave this empty<input type="text" id="f-hp" name="botcheck" tabindex="-1" autocomplete="off"></label></div>
       </form>
       <div class="actions">
@@ -538,7 +538,7 @@ function totals(cart, menu) {
       "\n\nSubtotal: " + money(t.sub) + "\nPO discount 25%: -" + money(t.disc) + "\nTotal: " + money(t.total) +
       "\n\nName: " + $("f-name").value.trim() + "\nWhatsApp: " + $("f-phone").value.trim() + "\nReply: https://wa.me/" + waDigits($("f-phone").value);
     var addr = $("f-addr").value.trim();
-    out += addr ? "\nAddress: " + addr : "\nPickup (no address given)";
+    out += "\nAddress: " + addr;
     var note = $("f-note").value.trim();
     if (note) out += "\nNote: " + note;
     return out;
@@ -597,6 +597,7 @@ function totals(cart, menu) {
     if (!$("f-name").value.trim()) { $("f-name").classList.add("bad"); $("f-name").focus(); msg("Add your name so the seller knows who ordered.", true); return false; }
     var digits = $("f-phone").value.replace(/\D/g, "");
     if (digits.length < 8) { $("f-phone").classList.add("bad"); $("f-phone").focus(); msg("Add the WhatsApp number the seller should reply to.", true); return false; }
+    if ($("f-addr").value.trim().length < 6) { $("f-addr").classList.add("bad"); $("f-addr").focus(); msg("Add your delivery address so we know where to bring your order.", true); return false; }
     return true;
   }
   var sending = false, pending = null, lastSentAt = 0;
